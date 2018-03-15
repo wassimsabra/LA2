@@ -5,6 +5,7 @@ var express = require('express');
 var app = express();
 
 var fs = require('fs');
+
 function getFilesList(f, dir){
     var files = [];
     fs.readdirSync(dir).forEach(
@@ -22,6 +23,23 @@ app.get('/', function(req, res){
 });
 
 app.get('/:name', function(req, res){
+    var content_type = req.get('Content-Type');
+    
+    switch(content_type) {
+        case 'text/plain':
+            console.log("it's a text");
+            break;
+        case 'text/html':
+            console.log('it is HTML');
+            break;
+        case 'application/json':
+            console.log('json package');
+            break;
+        default:
+            console.log('undefined');
+            break;
+    }
+    
     fs.open('./public/'+req.params.name, 'r', function(err, file){
         if(!err){
             fs.readFile(file, {encoding: 'utf-8'}, function (err, data){
