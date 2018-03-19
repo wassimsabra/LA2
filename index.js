@@ -2,7 +2,14 @@
 
 var http = require('http');
 var express = require('express');
+var bodyParser = require('body-parser');
 var app = express();
+
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({
+  extended: true
+}));
 
 var fs = require('fs');
 
@@ -18,14 +25,14 @@ function getFilesList(f, dir){
     return JSON.stringify(files);
 }
 
+//Task 1 Get a list of files available to the public
 app.get('/', function(req, res){
     res.send('{ "files": '+getFilesList(fs, './public/')+ '}');
 });
 
+//Task 2 Get a file by name, returns an erro if the file does not exist
 app.get('/:name', function(req, res){
-    var content_type = req.get('Content-Type');
-    
-    switch(content_type) {
+    switch(req.headers['accept']) {
         case 'text/plain':
             console.log("it's a text");
             break;
@@ -35,8 +42,11 @@ app.get('/:name', function(req, res){
         case 'application/json':
             console.log('json package');
             break;
+        case 'application/xml':
+            console.log('json package');
+            break;
         default:
-            console.log('undefined');
+            //console.log('undefined');
             break;
     }
     
@@ -56,9 +66,10 @@ app.get('/:name', function(req, res){
     });
 });
 
-
+//Upload a file to the server
 app.post('/:file', function(req, res){
     console.log(req.body);
+    res.end();
 });
 
 app.listen(3000, function(){
