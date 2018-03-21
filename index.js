@@ -27,7 +27,6 @@ function handle(socket) {
     //Received Data from the socket
     socket.on('data', (data) => {
         var request = data.toString().trim();
-        console.log(request);
         //Process the request
         parseRequest(request, function (options) {
             if(lock[options.path] !== "none" && lock[options.path] !== undefined){
