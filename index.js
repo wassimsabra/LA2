@@ -8,6 +8,17 @@ server.listen(9999, '127.0.0.1');//Listen on IP, PORT
 
 server.on('connection', handle);//Handle on connection event
 
+function getFilesList(dir){
+    var files = [];
+    fs.readdirSync(dir).forEach(
+        file => {
+            if(fs.lstatSync(dir+file).isFile()){
+                files.push(file);
+            }
+        }
+    );    
+    return JSON.stringify(files);
+}
 
 function handle(socket) {
 
@@ -159,4 +170,3 @@ function handle(socket) {
         socket.end();
     });
 }
-
