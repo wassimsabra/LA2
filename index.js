@@ -135,7 +135,7 @@ function handle(socket) {
                                 socket.write(`Content-Length: ${data.length}\r\n\r\n`);//Two CR LF End of headers, the following is the body 
                                 socket.write(`${data}`);
                                 socket.end();
-                                //lock[options.path] = "none";
+                                lock[options.path] = "none";
                             });
                         }
                         else {//File not found
