@@ -2,6 +2,7 @@
 
 var net = require('net');
 var fs = require('fs');
+var path = require('path');
 var server = net.createServer();
 
 server.listen(9999, '127.0.0.1');//Listen on IP, PORT
@@ -111,7 +112,9 @@ function handle(socket) {
                         if (!err) {//Return the content of the file if exists
                             fs.readFile(file, { encoding: 'utf-8' }, function (err, data) {
                                 socket.write(`${options['http']} 200 OK\r\n`);
-                                socket.write('Content-Type: text/html\r\n');
+                                socket.write(`Content-Type: ${options['accept']}\r\n`);
+                                //Content disposition header
+                                socket.write(`Content-Disposition: attachment; filename=${path.basename(options.path)}\r\n`);
                                 socket.write(`Content-Length: ${data.length}\r\n\r\n`);//Two CR LF End of headers, the following is the body 
                                 socket.write(`${data}`);
                                 socket.end();
